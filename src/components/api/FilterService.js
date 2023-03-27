@@ -1,4 +1,4 @@
-import {ObjectUtils} from 'primevue/utils';
+import { ObjectUtils } from 'primevue/utils';
 
 const FilterService = {
     filter(value, fields, filterValue, filterMatchMode, filterLocale) {
@@ -20,71 +20,74 @@ const FilterService = {
         return filteredItems;
     },
     filters: {
-        startsWith(value, filter, filterLocale)  {
+        startsWith(value, filter, filterLocale) {
             if (filter === undefined || filter === null || filter.trim() === '') {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             let filterValue = ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
             let stringValue = ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
-    
+
             return stringValue.slice(0, filterValue.length) === filterValue;
         },
         contains(value, filter, filterLocale) {
             if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
-            let filterValue = ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
-            let stringValue = ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
-    
-            return stringValue.indexOf(filterValue) !== -1;
+
+            let searchSplit = filter.split(' ');
+
+            let regEx = '^(?=.*?' + searchSplit.join(')(?=.*?') + ').*$';
+
+            let regExObj = new RegExp(regEx, 'i');
+
+            return regExObj.test(value);
         },
         notContains(value, filter, filterLocale) {
             if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             let filterValue = ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
             let stringValue = ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
-    
+
             return stringValue.indexOf(filterValue) === -1;
         },
         endsWith(value, filter, filterLocale) {
             if (filter === undefined || filter === null || filter.trim() === '') {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             let filterValue = ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
             let stringValue = ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
-    
+
             return stringValue.indexOf(filterValue, stringValue.length - filterValue.length) !== -1;
         },
         equals(value, filter, filterLocale) {
             if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             if (value.getTime && filter.getTime)
                 return value.getTime() === filter.getTime();
             else
@@ -94,11 +97,11 @@ const FilterService = {
             if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
                 return false;
             }
-    
+
             if (value === undefined || value === null) {
                 return true;
             }
-    
+
             if (value.getTime && filter.getTime)
                 return value.getTime() !== filter.getTime();
             else
@@ -108,26 +111,26 @@ const FilterService = {
             if (filter === undefined || filter === null || filter.length === 0) {
                 return true;
             }
-    
+
             for (let i = 0; i < filter.length; i++) {
                 if (ObjectUtils.equals(value, filter[i])) {
                     return true;
                 }
             }
-    
+
             return false;
         },
         between(value, filter) {
             if (filter == null || filter[0] == null || filter[1] == null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             if (value.getTime)
-            return filter[0].getTime() <= value.getTime() && value.getTime() <= filter[1].getTime();
+                return filter[0].getTime() <= value.getTime() && value.getTime() <= filter[1].getTime();
             else
                 return filter[0] <= value && value <= filter[1];
         },
@@ -135,11 +138,11 @@ const FilterService = {
             if (filter === undefined || filter === null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             if (value.getTime && filter.getTime)
                 return value.getTime() < filter.getTime();
             else
@@ -149,11 +152,11 @@ const FilterService = {
             if (filter === undefined || filter === null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             if (value.getTime && filter.getTime)
                 return value.getTime() <= filter.getTime();
             else
@@ -163,11 +166,11 @@ const FilterService = {
             if (filter === undefined || filter === null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             if (value.getTime && filter.getTime)
                 return value.getTime() > filter.getTime();
             else
@@ -177,11 +180,11 @@ const FilterService = {
             if (filter === undefined || filter === null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
-    
+
             if (value.getTime && filter.getTime)
                 return value.getTime() >= filter.getTime();
             else
@@ -191,7 +194,7 @@ const FilterService = {
             if (filter === undefined || filter === null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
@@ -202,7 +205,7 @@ const FilterService = {
             if (filter === undefined || filter === null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
@@ -213,7 +216,7 @@ const FilterService = {
             if (filter === undefined || filter === null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
@@ -224,7 +227,7 @@ const FilterService = {
             if (filter === undefined || filter === null) {
                 return true;
             }
-    
+
             if (value === undefined || value === null) {
                 return false;
             }
